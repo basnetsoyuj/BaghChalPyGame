@@ -18,7 +18,10 @@ pygame.display.set_caption('Bagh Chal')
 clock = pygame.time.Clock()
 
 
-board = pygame.image.load("images/board.png")
+board_img = pygame.image.load("images/board.png")
+tiger_img = pygame.image.load("images/tiger.png")
+goat_img = pygame.image.load("images/goat.png")
+
 func=lambda x,y:(round(x/100),round(y/100))
 dict_center={(0, 0): (194, 145), (0, 1): (194, 248), (0, 2): (194, 351), (0, 3): (194, 454), (0, 4): (194, 557),
              (1, 0): (297, 145), (1, 1): (297, 248), (1, 2): (297, 351), (1, 3): (297, 454), (1, 4): (297, 557),
@@ -40,26 +43,29 @@ def coordinate_pointing():
     else:
         return 0
 
-class piece(object):
+class Board:
+    def draw(self):
+        screen.blit(board_img, (boardX, boardY))
+
+class Piece(object):
     def __init__(self,sprite,coordinate):
         self.coordinate=coordinate
-        self.sprite=pygame.image.load(f"images/{sprite}")
+        self.sprite=sprite
         self.x,self.y=dict_center[coordinate]
     def draw(self,window):
         window.blit(self.sprite,(self.x-29,self.y-29))
-class tiger(piece):
+class Tiger(Piece):
     pass
-class goat(piece):
+class Goat(Piece):
     pass
 
 #defining objects
-pieces=[tiger("tiger.png",(x,y))for x in {0,4} for y in {0,4}]
+pieces=[Tiger(tiger_img,(x,y))for x in {0,4} for y in {0,4}]
 
 turn=1
 
-
 board_dict={x.coordinate:x for x in pieces}
-
+board=Board()
 
 dragging=False
 gameExit = False
@@ -74,7 +80,7 @@ while not gameExit:
     clock.tick(60)
 
     screen.fill(WHITE)
-    screen.blit(board,(boardX,boardY))
+    board.draw()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameExit = True
